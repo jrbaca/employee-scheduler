@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{fragments/layout}" th:with="title='Scheduling - Welcome'"
+      xmlns:layout="http://www.thymeleaf.org" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="row" layout:fragment="content">
+  <div class="col-lg">
+    <h1 th:text="'Welcome, ' + ${user.firstName} + '!'"></h1>
+    <a th:href="@{/login}">Login</a>
+  </div>
+</div>
+</body>
+</html>

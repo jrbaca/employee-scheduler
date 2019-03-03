@@ -1,27 +1,21 @@
 package com.josephbaca.employeescheduler.controller
 
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
-import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
 
+/**
+ * Controller for mapping user endpoints that are not otherwise a part of other APIs.
+ */
 @Controller
 class HtmlController {
 
     @GetMapping("/")
-    fun home(@RequestParam(name = "name", required = false, defaultValue = "World") name: String, model: Model): String {
-        model["name"] = name
+    fun landingPage(): String {
         return "landing"
     }
 
-    @GetMapping("/employer/login")
-    fun employerLogin(model: Model): String {
-        return "employer/login"
-    }
-
-    @GetMapping("/employer/dashboard")
-    fun employerDashboard(model: Model): String {
-        return "employer/dashboard"
+    @GetMapping("/dashboard")
+    fun dashboard(): String {
+        return "user/dashboard"
     }
 }
