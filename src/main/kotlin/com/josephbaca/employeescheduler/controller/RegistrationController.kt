@@ -23,8 +23,8 @@ import javax.validation.Valid
  */
 @Controller
 class RegistrationController(
-        private val repository: UserRepository,
-        private val passwordEncoder: PasswordEncoder
+    private val repository: UserRepository,
+    private val passwordEncoder: PasswordEncoder
 ) {
 
     private val LOG = LoggerFactory.getLogger(this::class.java)
@@ -61,11 +61,14 @@ class RegistrationController(
      */
     private fun createUserAccount(accountDto: UserDto): User? {
         return if (repository.findByEmail(accountDto.email) == null) {
-            repository.save(User(
+            repository.save(
+                User(
                     accountDto.firstName,
                     accountDto.lastName,
                     accountDto.email,
-                    passwordEncoder!!.encode(accountDto.password)))
+                    passwordEncoder.encode(accountDto.password)
+                )
+            )
         } else null
     }
 

@@ -26,14 +26,14 @@ class EmployeeSchedulerApplication
 @Configuration
 @EnableWebSecurity
 class WebSecurityConfig(private val userDetailsService: MongoUserDetailsService) :
-        WebSecurityConfigurerAdapter() {
+    WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http
-                .authorizeRequests().antMatchers("/", "/*.css", "/signup").permitAll()
-                .anyRequest().authenticated().and()
-                .formLogin().loginPage("/login").permitAll().and()
-                .logout().permitAll()
+            .authorizeRequests().antMatchers("/", "/*.css", "/signup").permitAll()
+            .anyRequest().authenticated().and()
+            .formLogin().loginPage("/login").permitAll().and()
+            .logout().permitAll()
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
