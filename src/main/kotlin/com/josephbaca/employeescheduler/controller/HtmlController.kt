@@ -1,23 +1,21 @@
 package com.josephbaca.employeescheduler.controller
 
-import com.josephbaca.employeescheduler.model.UserDto
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
-import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.context.request.WebRequest
 
-
+/**
+ * Controller for mapping user endpoints that are not otherwise a part of other APIs.
+ */
 @Controller
 class HtmlController {
 
     @GetMapping("/")
-    fun home(): String {
+    fun landingPage(): String {
         return "landing"
     }
 
     @GetMapping("/dashboard")
-    fun employerDashboard(): String {
+    fun dashboard(): String {
         return "user/dashboard"
     }
 }

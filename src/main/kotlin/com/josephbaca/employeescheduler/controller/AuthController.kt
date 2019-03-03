@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.ModelAndView
 import javax.validation.Valid
-import org.thymeleaf.spring5.util.FieldUtils.hasErrors
 
-
-
-
+/**
+ * The authorization controller maps the endpoints for signing up, logging in/out, etc.
+ * @param repository Connection to the [User] model in the database by using [UserRepository]
+ */
 @Controller
 class AuthController(private val repository: UserRepository) {
 
@@ -32,40 +32,41 @@ class AuthController(private val repository: UserRepository) {
     }
 
     @PostMapping("/signup")
-    fun registerUserAccount(@ModelAttribute("user") @Valid accountDto: UserDto, result: BindingResult, request: WebRequest, errors: Errors): ModelAndView {
-        LOG.info("signing up %s".format(accountDto))
-        var registered: User? = null
-        if (!result.hasErrors()) {
-            registered = createUserAccount(accountDto)
-        }
-        if (registered == null) {
+    fun registerUserAccount(
+        @ModelAttribute("user") @Valid accountDto: UserDto,
+        result: BindingResult,
+        request: WebRequest,
+        errors: Errors
+    ): ModelAndView {
+
+        val newUser: User? = if (result.hasErrors()) null else createUserAccount(accountDto)
+
+        if (newUser == null) {
             result.rejectValue("email", "message.regError")
         }
 
         return if (result.hasErrors()) {
             ModelAndView("user/signup", "user", accountDto)
         } else {
-            ModelAndView("landing", "user", accountDto)
+            ModelAndView("dashboard", "user", accountDto)
         }
     }
 
+    /**
+     * Attempts to create a user account. Returns null if the email already exists.
+     */
     private fun createUserAccount(accountDto: UserDto): User? {
-        if (repository.findByEmail(accountDto.email!!) != null) {
-            return null;
-        } else {
-            val user = User(accountDto.firstName!!, accountDto.lastName!!, accountDto.email, accountDto.password!!)
-            return repository.save(user)
-        }
+        return if (repository.findByEmail(accountDto.email) == null) {
+            repository.save(User(
+                    accountDto.firstName,
+                    accountDto.lastName,
+                    accountDto.email,
+                    accountDto.password))
+        } else null
     }
 
     @GetMapping("/login")
     fun login(): String {
         return "user/login"
     }
-
-//    @GetMapping("/signup")
-//    fun showRegistrationForm(request: WebRequest, model: Model): String {
-//        model["user"] = UserDto()
-//        return "user/signup"
-//    }
 }
