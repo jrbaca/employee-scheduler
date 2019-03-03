@@ -4,6 +4,7 @@ import com.josephbaca.employeescheduler.model.User
 import com.josephbaca.employeescheduler.model.UserDto
 import com.josephbaca.employeescheduler.model.UserRepository
 import org.slf4j.LoggerFactory
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -17,11 +18,14 @@ import org.springframework.web.servlet.ModelAndView
 import javax.validation.Valid
 
 /**
- * The authorization controller maps the endpoints for signing up, logging in/out, etc.
+ * The registration controller maps the endpoints for signing up, logging in/out, etc.
  * @param repository Connection to the [User] model in the database by using [UserRepository]
  */
 @Controller
-class AuthController(private val repository: UserRepository) {
+class RegistrationController(
+        private val repository: UserRepository,
+        private val passwordEncoder: PasswordEncoder
+) {
 
     private val LOG = LoggerFactory.getLogger(this::class.java)
 
@@ -48,7 +52,7 @@ class AuthController(private val repository: UserRepository) {
         return if (result.hasErrors()) {
             ModelAndView("user/signup", "user", accountDto)
         } else {
-            ModelAndView("dashboard", "user", accountDto)
+            ModelAndView("user/signupSuccess", "user", accountDto)
         }
     }
 
@@ -61,7 +65,7 @@ class AuthController(private val repository: UserRepository) {
                     accountDto.firstName,
                     accountDto.lastName,
                     accountDto.email,
-                    accountDto.password))
+                    passwordEncoder!!.encode(accountDto.password)))
         } else null
     }
 

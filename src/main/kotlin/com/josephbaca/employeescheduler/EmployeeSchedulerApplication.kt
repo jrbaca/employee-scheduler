@@ -1,5 +1,6 @@
 package com.josephbaca.employeescheduler
 
+import com.josephbaca.employeescheduler.services.MongoUserDetailsService
 import nz.net.ultraq.thymeleaf.LayoutDialect
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -9,7 +10,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import com.josephbaca.employeescheduler.services.MongoUserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 
@@ -36,8 +36,8 @@ class WebSecurityConfig(private val userDetailsService: MongoUserDetailsService)
                 .logout().permitAll()
     }
 
-    override fun configure(auth: AuthenticationManagerBuilder?) {
-        auth!!.userDetailsService(userDetailsService)
+    override fun configure(auth: AuthenticationManagerBuilder) {
+        auth.userDetailsService(userDetailsService)
     }
 
     @Bean
