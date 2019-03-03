@@ -33,8 +33,8 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http
-                .authorizeRequests().antMatchers("/", "/*.css").permitAll().anyRequest().authenticated().and()
-                .formLogin().loginPage("/employer/login").permitAll().and()
+                .authorizeRequests().antMatchers("/*.css", "/signup").permitAll().anyRequest().authenticated().and()
+                .formLogin().loginPage("/login").permitAll().and()
                 .logout().permitAll()
     }
 
@@ -46,17 +46,6 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
     fun passwordEncoder(): PasswordEncoder {
         return BCryptPasswordEncoder()
     }
-
-//    @Bean
-//    public override fun userDetailsService(): UserDetailsService {
-//        val user = User.withDefaultPasswordEncoder()
-//                .username("user")
-//                .password("password")
-//                .roles("USER")
-//                .build()
-//
-//        return InMemoryUserDetailsManager(user)
-//    }
 }
 
 fun main(args: Array<String>) {

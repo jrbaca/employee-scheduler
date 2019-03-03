@@ -1,7 +1,12 @@
 package com.josephbaca.employeescheduler.controller
 
+import com.josephbaca.employeescheduler.model.UserDto
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
+import org.springframework.ui.set
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.context.request.WebRequest
+
 
 @Controller
 class HtmlController {
@@ -11,13 +16,8 @@ class HtmlController {
         return "landing"
     }
 
-    @GetMapping("/employer/login")
-    fun employerLogin(): String {
-        return "employer/login"
-    }
-
-    @GetMapping("/employer/dashboard")
+    @GetMapping("/dashboard")
     fun employerDashboard(): String {
-        return "employer/dashboard"
+        return "user/dashboard"
     }
 }
