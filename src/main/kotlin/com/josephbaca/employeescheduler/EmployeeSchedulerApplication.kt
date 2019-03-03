@@ -5,12 +5,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.provisioning.InMemoryUserDetailsManager
+import com.josephbaca.employeescheduler.services.MongoUserDetailsService
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
+
+
+
+
 
 @SpringBootApplication
 class EmployeeSchedulerApplication
@@ -18,23 +27,36 @@ class EmployeeSchedulerApplication
 @Configuration
 @EnableWebSecurity
 class WebSecurityConfig : WebSecurityConfigurerAdapter() {
+
+    @Autowired
+    var userDetailsService: MongoUserDetailsService? = null
+
     override fun configure(http: HttpSecurity) {
         http
-                .authorizeRequests().antMatchers("/").permitAll().anyRequest().authenticated().and()
+                .authorizeRequests().antMatchers("/", "/*.css").permitAll().anyRequest().authenticated().and()
                 .formLogin().loginPage("/employer/login").permitAll().and()
                 .logout().permitAll()
     }
 
-    @Bean
-    public override fun userDetailsService(): UserDetailsService {
-        val user = User.withDefaultPasswordEncoder()
-                .username("user")
-                .password("password")
-                .roles("USER")
-                .build()
-
-        return InMemoryUserDetailsManager(user)
+    override fun configure(auth: AuthenticationManagerBuilder?) {
+        auth!!.userDetailsService(userDetailsService)
     }
+
+    @Bean
+    fun passwordEncoder(): PasswordEncoder {
+        return BCryptPasswordEncoder()
+    }
+
+//    @Bean
+//    public override fun userDetailsService(): UserDetailsService {
+//        val user = User.withDefaultPasswordEncoder()
+//                .username("user")
+//                .password("password")
+//                .roles("USER")
+//                .build()
+//
+//        return InMemoryUserDetailsManager(user)
+//    }
 }
 
 fun main(args: Array<String>) {
