@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}" th:with="title='Scheduling'">
+<body>
+<div class="row" layout:fragment="content">
+  <div class="col-lg">
+    <p th:text="'Hello, ' + ${name} + '!'"></p>
+    <a class="btn btn-primary" th:href="@{/employer/login}" role="button">Employer Login</a>
+    <a class="btn btn-primary" th:href="@{#}" role="button">Employee Login</a>
+  </div>
+</div>
+</body>
+</html>
